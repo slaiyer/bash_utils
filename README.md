@@ -1,2 +1,1 @@
-Bash helper library
-
+# Bash helper library
