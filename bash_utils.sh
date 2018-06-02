@@ -79,6 +79,7 @@ log_msg() { # Parameters: class, text, force
     local stream=1
     local color=''
 
+    # Print current message irrespective of global verbosity level
     [[ "${3:-default}" == 'force' ]] \
         && verb_lvl=2
 
