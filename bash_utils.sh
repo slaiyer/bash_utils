@@ -61,7 +61,7 @@ trap 'trace "${?}' ERR
 require() { # Parameters: bin_list
     local -a bin_list=( "${@}" )
     for binary in "${bin_list[@]}"; do
-        #command -v "${binary}" > /dev/null 2>&1 \
+        # command -v "${binary}" > /dev/null 2>&1 \
         type "${binary}" > /dev/null 2>&1 \
             || {
                 log_msg 'ABORT' "Could not locate '${binary}' executable"
