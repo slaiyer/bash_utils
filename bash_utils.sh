@@ -77,11 +77,12 @@ log_msg() { # Parameters: class, text, force_print
     local verb_lvl="${verbosity:-1}"
     local class="${1:-WARN}"
     local text="${2:-Lorem ipsum dolor sit amet}"
+    local force_print="${3:-default}"
     local stream=1
     local color=''
 
     # Print current message irrespective of global verbosity level
-    [[ "${3:-default}" == 'force' ]] \
+    [[ "${force_print}" == 'force' ]] \
         && verb_lvl=2
 
     case "${class}" in
