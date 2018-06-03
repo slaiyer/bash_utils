@@ -45,7 +45,7 @@ trace() {
         done
 
         printf '%s' "${text}" \
-            | column -ts '|' \
+            | column -t -s '|' \
             | sed -u 's/^/\t/' 1>&2
     fi
 
@@ -73,7 +73,7 @@ require() { # Parameters: bin_list
 export -f require
 
 # Print timestamped message to the selected stream
-log_msg() { # Parameters: class, text, force
+log_msg() { # Parameters: class, text, force_print
     local verb_lvl="${verbosity:-1}"
     local class="${1:-WARN}"
     local text="${2:-Lorem ipsum dolor sit amet}"
