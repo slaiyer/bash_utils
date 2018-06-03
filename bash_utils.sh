@@ -87,13 +87,11 @@ log_msg() { # Parameters: class, text, force
         INFO)
             (( verb_lvl < 2 )) \
                 && return
-
             color="${blu}"
             ;;
         WARN)
             (( verb_lvl < 1 )) \
                 && return
-
             stream=2
             color="${b}${yel}"
             ;;
