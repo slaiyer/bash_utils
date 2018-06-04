@@ -1,6 +1,6 @@
 # Bash utilities
 
-Helper library for setting up a more formal environment
+Helper library for setting up a more formal scripting environment
 
 ## Dependencies
 
