@@ -55,7 +55,7 @@ trace() {
 export -f trace
 
 # Set trap on error
-trap 'trace "${?}' ERR
+trap 'trace "${?}"' ERR
 
 # Check if specified binary is available in PATH
 require() { # Parameters: bin_list
