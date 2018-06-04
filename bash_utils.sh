@@ -27,7 +27,7 @@ export yel=$'\e[33m'
 export blu=$'\e[34m'
 
 # Print stack trace
-trace() {
+trace() { # Parameters: last_exit_code
     local error="${?}"
     set +o xtrace
     log_msg 'ERROR' "\`${BASH_COMMAND}\` exited with status ${error}"
