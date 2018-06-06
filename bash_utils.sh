@@ -12,26 +12,26 @@ set -o pipefail
 set -o nounset
 
 # ANSI codes and common combinations
-export n=$'\e[0m'
-export b=$'\e[1m'
-export d=$'\e[2m'
-export i=$'\e[3m'
-export u=$'\e[4m'
-export k=$'\e[5m'
-export v=$'\e[7m'
-export h=$'\e[8m'
-export sqo="${d}[${n}"
-export sqc="${d}]${n}"
-export red=$'\e[31m'
-export grn=$'\e[32m'
-export yel=$'\e[33m'
-export blu=$'\e[34m'
+declare -gx n=$'\e[0m'
+declare -gx b=$'\e[1m'
+declare -gx d=$'\e[2m'
+declare -gx i=$'\e[3m'
+declare -gx u=$'\e[4m'
+declare -gx k=$'\e[5m'
+declare -gx v=$'\e[7m'
+declare -gx h=$'\e[8m'
+declare -gx sqo="${d}[${n}"
+declare -gx sqc="${d}]${n}"
+declare -gx red=$'\e[31m'
+declare -gx grn=$'\e[32m'
+declare -gx yel=$'\e[33m'
+declare -gx blu=$'\e[34m'
 
 # Print stack trace
 trace() { # Parameters: last_exit_code
-    local error="${?}"
+    local -ir code="${?}"
     set +o xtrace
-    log_msg 'ERROR' "\`${BASH_COMMAND}\` exited with status ${error}"
+    log_msg 'ERROR' "\`${BASH_COMMAND}\` exited with status ${code}"
 
     if (( "${#FUNCNAME[@]}" > 2 )); then
         printf '%s:\n' "${b}Stack trace${n}" 1>&2
@@ -53,14 +53,14 @@ trace() { # Parameters: last_exit_code
     exit "${1:-1}"
 }
 
-export -f trace
+declare -gx trace
 
 # Set trap on error
 trap 'trace "${?}"' ERR
 
 # Check if specified binary is available in PATH
 require() { # Parameters: bin_list
-    local -a bin_list=( "${@}" )
+    local -ar bin_list=( "${@}" )
     for binary in "${bin_list[@]}"; do
         type "${binary}" > /dev/null 2>&1 \
             || {
@@ -74,11 +74,11 @@ export -f require
 
 # Print timestamped message to the selected stream
 log_msg() { # Parameters: class, text, force_print
-    local verb_lvl="${verbosity:-1}"
-    local class="${1:-WARN}"
-    local text="${2:-Lorem ipsum dolor sit amet}"
-    local force_print="${3:-default}"
-    local stream=1
+    local -i verb_lvl="${verbosity:-1}"
+    local -r class="${1:-WARN}"
+    local -r text="${2:-Lorem ipsum dolor sit amet}"
+    local -r force_print="${3:-default}"
+    local -i stream=1
     local color=''
 
     # Print current message irrespective of global verbosity level
