@@ -94,10 +94,14 @@ log() { # Parameters: class, text, force_print
     local -r verb_lvl
 
     case "${class}" in
+        DEBUG)
+            (( verb_lvl < 3 )) \
+                && return
+            color="${blu}"
+            ;;
         INFO)
             (( verb_lvl < 2 )) \
                 && return
-            color="${blu}"
             ;;
         WARN)
             (( verb_lvl < 1 )) \
