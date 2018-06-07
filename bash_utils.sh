@@ -11,27 +11,29 @@ set -o errtrace
 set -o pipefail
 set -o nounset
 
+################################################################################
+
 # ANSI codes and common combinations
-declare -gx n=$'\e[0m'
-declare -gx b=$'\e[1m'
-declare -gx d=$'\e[2m'
-declare -gx i=$'\e[3m'
-declare -gx u=$'\e[4m'
-declare -gx k=$'\e[5m'
-declare -gx v=$'\e[7m'
-declare -gx h=$'\e[8m'
-declare -gx sqo="${d}[${n}"
-declare -gx sqc="${d}]${n}"
-declare -gx red=$'\e[31m'
-declare -gx grn=$'\e[32m'
-declare -gx yel=$'\e[33m'
-declare -gx blu=$'\e[34m'
+declare -rx n=$'\e[0m'
+declare -rx b=$'\e[1m'
+declare -rx d=$'\e[2m'
+declare -rx i=$'\e[3m'
+declare -rx u=$'\e[4m'
+declare -rx k=$'\e[5m'
+declare -rx v=$'\e[7m'
+declare -rx h=$'\e[8m'
+declare -rx sqo="${d}[${n}"
+declare -rx sqc="${d}]${n}"
+declare -rx red=$'\e[31m'
+declare -rx grn=$'\e[32m'
+declare -rx yel=$'\e[33m'
+declare -rx blu=$'\e[34m'
 
 # Print stack trace
 trace() { # Parameters: last_exit_code
     local -ir code="${?}"
     set +o xtrace
-    log_msg 'ERROR' "\`${BASH_COMMAND}\` exited with status ${code}"
+    log 'ERROR' "\`${BASH_COMMAND}\` exited with status ${code}"
 
     if (( "${#FUNCNAME[@]}" > 2 )); then
         printf '%s:\n' "${b}Stack trace${n}" 1>&2
@@ -44,6 +46,8 @@ trace() { # Parameters: last_exit_code
             text="${text}|${b}${FUNCNAME["${idx}"]}${n}"
             text="${text}"$'\n'
         done
+        unset -v idx
+        local -r text
 
         printf '%s' "${text}" \
             | column -t -s '|' \
@@ -53,7 +57,8 @@ trace() { # Parameters: last_exit_code
     exit "${1:-1}"
 }
 
-declare -gx trace
+# shellcheck disable=SC2154
+declare -fx trace
 
 # Set trap on error
 trap 'trace "${?}"' ERR
@@ -64,16 +69,18 @@ require() { # Parameters: bin_list
     for binary in "${bin_list[@]}"; do
         type "${binary}" > /dev/null 2>&1 \
             || {
-                log_msg 'ABORT' "Could not locate '${binary}' executable"
+                log 'ABORT' "Could not locate '${binary}' executable"
                 exit 1
             }
     done
+    unset -v binary
 }
 
-export -f require
+# shellcheck disable=SC2154
+declare -fx require
 
 # Print timestamped message to the selected stream
-log_msg() { # Parameters: class, text, force_print
+log() { # Parameters: class, text, force_print
     local -i verb_lvl="${verbosity:-1}"
     local -r class="${1:-WARN}"
     local -r text="${2:-Lorem ipsum dolor sit amet}"
@@ -84,6 +91,7 @@ log_msg() { # Parameters: class, text, force_print
     # Print current message irrespective of global verbosity level
     [[ "${force_print}" == 'force' ]] \
         && verb_lvl=2
+    local -r verb_lvl
 
     case "${class}" in
         INFO)
@@ -110,20 +118,23 @@ log_msg() { # Parameters: class, text, force_print
             color="${b}${red}${v}${k}"
             ;;
     esac
+    local -r stream
 
     printf '\n%s %s %s\n' \
         "${d}$(timestamp)${n}" \
         "${sqo}${color}${class}${n}${sqc}" \
         "${text}" \
-        1>&"${stream}"
+        1>&${stream}
 }
 
-export -f log_msg
+# shellcheck disable=SC2154
+declare -fx log
 
 # Return current timestamp
 timestamp() {
     date '+%F %T %z' \
-        || log_msg 'WARN' 'Could not acquire timestamp'
+        || log 'WARN' 'Could not acquire timestamp'
 }
 
-export -f timestamp
+# shellcheck disable=SC2154
+declare -fx timestamp
