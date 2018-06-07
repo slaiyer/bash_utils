@@ -102,6 +102,7 @@ log() { # Parameters: class, text, force_print
         INFO)
             (( verb_lvl < 2 )) \
                 && return
+            color="${grn}"
             ;;
         WARN)
             (( verb_lvl < 1 )) \
@@ -136,7 +137,7 @@ declare -fx log
 
 # Return current timestamp
 timestamp() {
-    date '+%F %T %z' \
+    date -I'seconds' \
         || log 'WARN' 'Could not acquire timestamp'
 }
 
