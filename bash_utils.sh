@@ -79,6 +79,14 @@ require() { # Parameters: cmd_list
 # shellcheck disable=SC2154
 declare -fx require
 
+# Reset formatting
+reset_fmt() {
+    printf '%s' "${n}"
+}
+
+# shellcheck disable=SC2154
+declare -fx require
+
 # Print timestamped message to the selected stream
 log() { # Parameters: class, text, force_print
     local -i verb_lvl="${verbosity:-1}"
@@ -125,11 +133,13 @@ log() { # Parameters: class, text, force_print
     esac
     local -r stream
 
+    reset_fmt 1>&${stream}
     printf '\n%s %s %s\n' \
         "${d}$(timestamp)${n}" \
         "${sqo}${color}${class}${n}${sqc}" \
         "${text}" \
         1>&${stream}
+    reset_fmt 1>&${stream}
 }
 
 # shellcheck disable=SC2154
