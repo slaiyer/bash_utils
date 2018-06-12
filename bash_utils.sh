@@ -63,17 +63,17 @@ declare -fx trace
 # Set trap on error
 trap 'trace "${?}"' ERR
 
-# Check if specified binary is available in PATH
-require() { # Parameters: bin_list
-    local -ar bin_list=( "${@}" )
-    for binary in "${bin_list[@]}"; do
-        type "${binary}" > /dev/null 2>&1 \
+# Check if specified command is available in PATH
+require() { # Parameters: cmd_list
+    local -ar cmd_list=( "${@}" )
+    for cmd in "${cmd_list[@]}"; do
+        type "${cmd}" > /dev/null 2>&1 \
             || {
-                log 'ABORT' "Could not locate '${binary}' executable"
+                log 'ABORT' "Could not detect '${cmd}'"
                 exit 1
             }
     done
-    unset -v binary
+    unset -v cmd
 }
 
 # shellcheck disable=SC2154
