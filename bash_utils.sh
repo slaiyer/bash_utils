@@ -153,3 +153,5 @@ timestamp() {
 
 # shellcheck disable=SC2154
 declare -fx timestamp
+
+require 'column' 'sed' 'date'
