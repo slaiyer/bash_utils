@@ -67,7 +67,7 @@ trap 'trace "${?}"' ERR
 require() { # Parameters: cmd_list
     local -ar cmd_list=( "${@}" )
     for cmd in "${cmd_list[@]}"; do
-        if ! command -v "${@}"; then
+        if ! type "${cmd}" > /dev/null 2>&1; then
             log 'ABORT' "Could not detect '${cmd}'"
             exit 1
         fi
