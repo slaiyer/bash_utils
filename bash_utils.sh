@@ -8,8 +8,8 @@
 # Define default shell behaviour
 set -o errexit
 set -o errtrace
-set -o pipefail
 set -o nounset
+set -o pipefail
 
 ################################################################################
 
@@ -46,7 +46,6 @@ trace() { # Parameters: last_exit_code
             text="${text}|${b}${FUNCNAME["${idx}"]}${n}"
             text="${text}"$'\n'
         done
-        unset -v idx
         local -r text
 
         printf '%s' "${text}" \
@@ -72,7 +71,6 @@ require() { # Parameters: cmd_list
             exit 1
         fi
     done
-    unset -v cmd
 }
 
 # shellcheck disable=SC2154
