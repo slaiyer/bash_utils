@@ -65,12 +65,16 @@ trap 'trace "${?}"' ERR
 # Check if specified command is available in PATH
 require() { # Parameters: cmd_list
     local -ar cmd_list=( "${@}" )
+    local -i not_found=0
     for cmd in "${cmd_list[@]}"; do
         if ! type "${cmd}" > /dev/null 2>&1; then
-            log 'ABORT' "Could not detect '${cmd}'"
-            exit 1
+            (( ++not_found ))
+            log 'ABORT' "Command not found: '${cmd}'"
         fi
     done
+
+    (( not_found > 0 )) \
+        && exit 1
 }
 
 # shellcheck disable=SC2154
