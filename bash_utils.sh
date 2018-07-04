@@ -73,8 +73,9 @@ require() { # Parameters: cmd_list
         fi
     done
 
-    (( not_found > 0 )) \
-        && exit 1
+    if (( not_found > 0 )); then
+        exit 1
+    fi
 }
 
 # shellcheck disable=SC2154
